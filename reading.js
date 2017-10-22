@@ -10,7 +10,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/comment', function (req, res) {
-  console.log(req.body);
+  console.log(req.query);
   res.send('comment to github');
 });
 
