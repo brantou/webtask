@@ -11,25 +11,34 @@ app.get('/', function (req, res) {
 });
 
 app.get('/comment', function (req, res) {
+  console.log(req.query);
+  var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
   var options = { 
     method: 'GET',
     url: 'https://api.github.com/search/issues',
     qs: { 
-      q: req.query.title,
+      q: encodeURIComponent(req.query.title.replace(/\s/g, '+'))+'%20state:open%20repo:brantou/reading',
       sort: 'created',
       order: 'desc'
     },
     headers: { 
       'cache-control': 'no-cache',
-      'authorization': GITHUB_AUTH_TOKEN
+      'authorization': 'token ' + auth_token,
+      'User-Agent': 'brantou',
     } };
+    console.log(options);
 
   request(options, function (error, response, body) {
-    if (error) res.sendStatus(404);
+    if (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+    console.log(body);
+    
     var issue_url = body.items[0].url;
     var comment_url = issue_url + '/comments';
     var comment = {
-      'body': '>'+req.query.highlightedText+"\n"+req.query.comment
+      'body': '>'+req.query.highlightedText+'\n'+req.query.comment
     };
     
     var options = {
@@ -37,16 +46,22 @@ app.get('/comment', function (req, res) {
       url: comment_url,
       headers: {
         'cache-control': 'no-cache',
-        authorization: 'token 620ad8f55591d7f0c29ea815ee5f1690f3218781' 
+        'User-Agent': 'brantou',
+        authorization: 'token ' +auth_token
       },
       body: JSON.stringify(comment) };
+      console.log(options);
 
     request(options, function (error, response, body) {
-      if (error) res.sendStatus(404);
-
-      res.sendStatus(200);
+      if (error) {
+        console.log(error);
+        throw new Error(error);
+      }
+      
+      console.log(body);
     });
   });
+  res.sendStatus(200);
 });
 
 app.get('/highlight', function (req, res) {
