@@ -17,7 +17,7 @@ app.get('/comment', function (req, res) {
     method: 'GET',
     url: 'https://api.github.com/search/issues',
     qs: { 
-      q: encodeURIComponent(req.query.title.replace(/\s/g, '+'))+'%20state:open%20repo:brantou/reading',
+      q: req.query.title + ' state:open repo:brantou/reading',
       sort: 'created',
       order: 'desc'
     },
@@ -26,19 +26,19 @@ app.get('/comment', function (req, res) {
       'authorization': 'token ' + auth_token,
       'User-Agent': 'brantou',
     } };
-    console.log(options);
+    console.log(options.qs);
 
   request(options, function (error, response, body) {
     if (error) {
       console.log(error);
       throw new Error(error);
     }
-    console.log(body);
     
-    var issue_url = body.items[0].url;
+    var jsonBody = JSON.parse(body);
+    var issue_url = jsonBody.items[0].url;
     var comment_url = issue_url + '/comments';
     var comment = {
-      'body': '>'+req.query.highlightedText+'\n'+req.query.comment
+      'body': '>'+req.query.highlightedText+'\n\n'+req.query.comment
     };
     
     var options = {
@@ -50,7 +50,6 @@ app.get('/comment', function (req, res) {
         authorization: 'token ' +auth_token
       },
       body: JSON.stringify(comment) };
-      console.log(options);
 
     request(options, function (error, response, body) {
       if (error) {
@@ -58,7 +57,7 @@ app.get('/comment', function (req, res) {
         throw new Error(error);
       }
       
-      console.log(body);
+      console.log(JSON.parse(body));
     });
   });
   res.sendStatus(200);
