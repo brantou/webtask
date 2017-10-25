@@ -18,7 +18,7 @@ app.post('/issue', function(req, res) {
         var issue = req.body.issue;
         var repository = req.body.repository;
 
-        var zenhub_estimate_url = 'https://api.zenhub.io/p1/repositories/' + req.body.repository.id + '/issue/' + req.body.issue.number + '/estimate';
+        var zenhub_estimate_url = 'https://api.zenhub.io/p1/repositories/' + repository.id + '/issue/' + issue.number + '/estimate';
         var options = {
             method: 'PUT',
             url: zenhub_estimate_url,
