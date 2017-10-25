@@ -41,7 +41,7 @@ app.post('/issue', function(req, res) {
         });
 
         var issue_body = {
-            'milestone': '1',
+            'milestone': req.webtaskContext.meta.MILESTONE_NUMBER,
             'assignees': ['brantou']
         };
         options = {
@@ -261,7 +261,6 @@ app.get('/like', function(req, res) {
             'User-Agent': 'brantou'
         }
     };
-    console.log(options.qs);
 
     request(options, function(error, response, body) {
         if (error) {
