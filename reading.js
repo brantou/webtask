@@ -10,6 +10,11 @@ app.get('/', function (req, res) {
   res.send('hello world');
 });
 
+app.post('/issue', function (req, res) {
+  console.log(req.body);
+  res.sendStatus(200);
+});
+
 app.get('/comment', function (req, res) {
   console.log(req.query);
   var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
@@ -57,7 +62,7 @@ app.get('/comment', function (req, res) {
         throw new Error(error);
       }
       
-      console.log(JSON.parse(body));
+      //console.log(JSON.parse(body));
     });
   });
   res.sendStatus(200);
@@ -110,7 +115,7 @@ app.get('/highlight', function (req, res) {
         throw new Error(error);
       }
       
-      console.log(JSON.parse(body));
+      //console.log(JSON.parse(body));
     });
   });
   res.sendStatus(200);
@@ -163,7 +168,7 @@ app.get('/archive', function (req, res) {
         throw new Error(error);
       }
       
-      console.log(JSON.parse(body));
+      //console.log(JSON.parse(body));
     });
   });
   res.sendStatus(200);
@@ -214,7 +219,7 @@ app.get('/like', function (req, res) {
         throw new Error(error);
       }
       
-      console.log(JSON.parse(body));
+      //console.log(JSON.parse(body));
     });
   });
   res.sendStatus(200);
