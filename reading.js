@@ -159,7 +159,7 @@ app.get('/highlight', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            'body': '>' + req.query.text + '\n\n精彩或睿智处，高亮已备注！'
+            'body': '>' + req.query.text + '\n\n精彩或睿智处，高亮备注！'
         };
 
         var options = {
