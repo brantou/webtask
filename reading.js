@@ -11,14 +11,13 @@ app.get('/', function(req, res) {
 });
 
 app.post('/issue', function(req, res) {
-    console.log(req.body);
     if (req.body.action == "opened") {
         var github_auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
         var zenhub_auth_token = req.webtaskContext.secrets.ZENHUB_AUTH_TOKEN;
         var issue = req.body.issue;
         var repository = req.body.repository;
 
-        var zenhub_estimate_url = 'https://api.zenhub.io/p1/repositories/' + repository.id + '/issue/' + issue.number + '/estimate';
+        var zenhub_estimate_url = 'https://api.zenhub.io/p1/repositories/' + repository.id + '/issues/' + issue.number + '/estimate';
         var options = {
             method: 'PUT',
             url: zenhub_estimate_url,
@@ -37,7 +36,7 @@ app.post('/issue', function(req, res) {
                 throw new Error(error);
             }
 
-            //console.log(body);
+            console.log(body);
         });
 
         var issue_body = {
