@@ -67,6 +67,10 @@ app.post('/issue', function(req, res) {
 });
 
 app.get('/comment', function(req, res) {
+    if (Object.keys(req.query).length === 0) {
+      res.sendStatus(200);
+      return;
+    }
     console.log(req.query);
     var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
     var repo = req.webtaskContext.meta.REPO;
@@ -99,7 +103,7 @@ app.get('/comment', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            'body': '>' + req.query.highlightedText + '\n\n' + req.query.comment
+            body: '>' + req.query.highlightedText + '\n\n' + req.query.comment
         };
 
         var options = {
@@ -126,6 +130,10 @@ app.get('/comment', function(req, res) {
 });
 
 app.get('/highlight', function(req, res) {
+    if (Object.keys(req.query).length === 0) {
+      res.sendStatus(200);
+      return;
+    }
     console.log(req.query);
     var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
     var repo = req.webtaskContext.meta.REPO;
@@ -158,7 +166,7 @@ app.get('/highlight', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            'body': '>' + req.query.text + '\n\n精彩或睿智处，高亮备注！'
+            body: '>' + req.query.text + '\n\n精彩或睿智处，高亮备注！'
         };
 
         var options = {
