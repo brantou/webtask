@@ -66,7 +66,7 @@ app.post('/issue', function(req, res) {
     res.sendStatus(200);
 });
 
-app.get('/comment', function(req, res) {
+app.post('/comment', function(req, res) {
     if (Object.keys(req.query).length === 0) {
       res.sendStatus(200);
       return;
@@ -129,12 +129,13 @@ app.get('/comment', function(req, res) {
     res.sendStatus(200);
 });
 
-app.get('/highlight', function(req, res) {
+app.post('/highlight', function(req, res) {
     if (Object.keys(req.query).length === 0) {
       res.sendStatus(200);
       return;
     }
     console.log(req.query);
+    
     var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
     var repo = req.webtaskContext.meta.REPO;
     var options = {
