@@ -2,7 +2,6 @@ var express = require('express');
 var Webtask = require('webtask-tools');
 var bodyParser = require('body-parser');
 var request = require("request");
-var morgan = require("morgan");
 var app = express();
 
 app.use(function (req, res, next) {
@@ -10,7 +9,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(morgan("short"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -108,7 +106,7 @@ app.post('/comment', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            body: '>' + req.body.highlightedText + '\n\n' + req.body.comment
+            body: '>' + req.body.highlightedText.replace(/\n\n\n*/g, '\n\n').replace(/\n\n/g, '\n\n>') + '\n\n' + req.body.comment
         };
 
         var options = {
@@ -169,7 +167,7 @@ app.post('/highlight', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            body: '>' + text + '\n\n精彩或睿智处，高亮备注！'
+            body: '>' + text.replace(/\n\n\n*/g, '\n\n').replace(/\n\n/g, '\n\n>') + '\n\n精彩或睿智处，高亮备注！'
         };
 
         var options = {
