@@ -2,9 +2,17 @@ var express = require('express');
 var Webtask = require('webtask-tools');
 var bodyParser = require('body-parser');
 var request = require("request");
+var morgan = require("morgan");
 var app = express();
 
+app.use(function (req, res, next) {
+  console.log(req._readableState.buffer.toString());
+  next();
+});
+
+app.use(morgan("short"));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function(req, res) {
     res.send('hello world');
@@ -67,18 +75,15 @@ app.post('/issue', function(req, res) {
 });
 
 app.post('/comment', function(req, res) {
-    if (Object.keys(req.query).length === 0) {
-      res.sendStatus(200);
-      return;
-    }
-    console.log(req.query);
+    console.log(req.body);
+    var title = req.body.title;
     var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
     var repo = req.webtaskContext.meta.REPO;
     var options = {
         method: 'GET',
         url: 'https://api.github.com/search/issues',
         qs: {
-            q: req.query.title + ' state:open repo:' + repo,
+            q: title + ' state:open repo:' + repo,
             sort: 'created',
             order: 'desc'
         },
@@ -103,7 +108,7 @@ app.post('/comment', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            body: '>' + req.query.highlightedText + '\n\n' + req.query.comment
+            body: '>' + req.body.highlightedText + '\n\n' + req.body.comment
         };
 
         var options = {
@@ -130,19 +135,16 @@ app.post('/comment', function(req, res) {
 });
 
 app.post('/highlight', function(req, res) {
-    if (Object.keys(req.query).length === 0) {
-      res.sendStatus(200);
-      return;
-    }
-    console.log(req.query);
-    
+    console.log(req.body);
+    var title = req.body.title;
+    var text = req.body.text;
     var auth_token = req.webtaskContext.secrets.GITHUB_AUTH_TOKEN;
     var repo = req.webtaskContext.meta.REPO;
     var options = {
         method: 'GET',
         url: 'https://api.github.com/search/issues',
         qs: {
-            q: req.query.title + ' state:open repo:' + repo,
+            q: title + ' state:open repo:' + repo,
             sort: 'created',
             order: 'desc'
         },
@@ -167,7 +169,7 @@ app.post('/highlight', function(req, res) {
         var issue_url = jsonBody.items[0].url;
         var comment_url = issue_url + '/comments';
         var comment = {
-            body: '>' + req.query.text + '\n\n精彩或睿智处，高亮备注！'
+            body: '>' + text + '\n\n精彩或睿智处，高亮备注！'
         };
 
         var options = {
