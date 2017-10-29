@@ -126,7 +126,7 @@ function searchIssue(context, issue_title, na_obj, na_pfunc) {
             sort: 'created',
             order: 'desc'
         },
-        headers: newGitHubHeader(req)
+        headers: newGitHubHeader(context)
     };
 
     request(options, function(error, response, body) {
