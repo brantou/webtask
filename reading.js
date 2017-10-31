@@ -89,7 +89,7 @@ app.post('/archive', function(req, res) {
     res.sendStatus(200);
 });
 
-app.get('/like', function(req, res) {
+app.post('/like', function(req, res) {
     console.log(req.body);
     var issue_title = req.body.title;
     var labels = ['like'];
