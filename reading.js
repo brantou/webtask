@@ -79,9 +79,9 @@ app.post('/highlight', function(req, res) {
     res.sendStatus(200);
 });
 
-app.get('/archive', function(req, res) {
-    console.log(req.query);
-    var issue_title = req.query.title;
+app.post('/archive', function(req, res) {
+    console.log(req.body);
+    var issue_title = req.body.title;
     var issue_obj = {
         'state': 'closed'
     };
@@ -90,8 +90,8 @@ app.get('/archive', function(req, res) {
 });
 
 app.get('/like', function(req, res) {
-    console.log(req.query);
-    var issue_title = req.query.title;
+    console.log(req.body);
+    var issue_title = req.body.title;
     var labels = ['like'];
     searchIssue(req.webtaskContext, issue_title, labels, setIssueLabel);
     res.sendStatus(200);
